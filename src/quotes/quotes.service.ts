@@ -46,6 +46,9 @@ export class QuotesService {
             period2: today.toISOString().split('T')[0],
             interval: '1d',
           });
+          if (symbol === 'BTC-USD') {
+            console.log('history', history);
+          }
 
           const prices = history.quotes || [];
           const last = prices.at(-1);
@@ -59,14 +62,22 @@ export class QuotesService {
             change: (last?.close ?? 0) - (prev?.close ?? 0),
             buy: last?.close ? last.close + SPREAD : 0,
             sell: last?.close ?? 0,
-            history: prices.map((d) => ({
-              time: new Date(d.date).toISOString().slice(5, 10),
-              open: d.open ?? 0,
-              close: d.close ?? 0,
-              high: d.high ?? 0,
-              low: d.low ?? 0,
-              price: d.close ?? 0,
-            })),
+            history: (prices || [])
+              .filter(
+                (d) =>
+                  d.open != null &&
+                  d.close != null &&
+                  d.high != null &&
+                  d.low != null,
+              )
+              .map((d) => ({
+                time: new Date(d.date).toISOString().slice(5, 10),
+                open: d.open as number,
+                close: d.close as number,
+                high: d.high as number,
+                low: d.low as number,
+                price: d.close as number,
+              })),
           };
         }),
       );
