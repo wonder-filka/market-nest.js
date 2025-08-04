@@ -209,6 +209,17 @@ exports.Prisma.PositionScalarFieldEnum = {
   startDate: 'startDate'
 };
 
+exports.Prisma.UserAssetScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  asset: 'asset',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  priceBuy: 'priceBuy',
+  priceSell: 'priceSell'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -253,7 +264,8 @@ exports.Prisma.ModelName = {
   Wallet: 'Wallet',
   Account: 'Account',
   Trade: 'Trade',
-  Position: 'Position'
+  Position: 'Position',
+  UserAsset: 'UserAsset'
 };
 
 /**

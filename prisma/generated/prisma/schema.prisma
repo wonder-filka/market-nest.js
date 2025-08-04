@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  output   = "./generated/prisma"
 }
 
 datasource db {
@@ -25,6 +25,7 @@ model User {
   sentMessages SupportMessage[] @relation("SenderMessages")
   trades       Trade[]
   wallet       Wallet           @relation(fields: [walletId], references: [id])
+  UserAsset    UserAsset[]
 }
 
 model SupportChat {
@@ -118,6 +119,20 @@ model Position {
   startDate DateTime       @default(now())
   account   Account        @relation(fields: [accountId], references: [id])
   user      User           @relation(fields: [userId], references: [id])
+}
+
+model UserAsset {
+  id        String    @id
+  userId    String
+  asset     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  deletedAt DateTime?
+  priceBuy  Float
+  priceSell Float
+  User      User      @relation(fields: [userId], references: [id])
+
+  @@unique([userId, asset])
 }
 
 enum ChatStatus {

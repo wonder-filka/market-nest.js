@@ -46,15 +46,11 @@ export class QuotesService {
             period2: today.toISOString().split('T')[0],
             interval: '1d',
           });
-          if (symbol === 'BTC-USD') {
-            console.log('history', history);
-          }
 
           const prices = history.quotes || [];
           const last = prices.at(-1);
           const prev = prices.at(-2);
           const SPREAD = 0.05;
-
           return {
             symbol,
             name: symbol,
