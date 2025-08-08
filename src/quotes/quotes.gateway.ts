@@ -29,13 +29,32 @@ export class QuotesGateway implements OnModuleInit {
       this.quotesService
         .getQuotes()
         .then((quotes) => {
+          const frozenSymbols = new Set(
+            quotes
+              .sort(() => Math.random() - 0.5) // перемешиваем массив
+              .slice(0, 3) // берём первые 3
+              .map((q) => q.symbol),
+          );
+
           const updatedQuotes = quotes.map((q) => {
+            // Если символ в frozenSymbols — оставляем цены без изменений
+            if (frozenSymbols.has(q.symbol)) {
+              return {
+                ...q,
+                price: +q.price.toFixed(3),
+                sell: +q.sell.toFixed(3),
+                buy: +q.buy.toFixed(3),
+              };
+            }
+
+            // Для остальных — изменение от 0 до 0.03
             const randomDiff = +(Math.random() * 0.03).toFixed(2);
+
             return {
               ...q,
               price: +(q.price + randomDiff).toFixed(3),
               sell: +(q.sell + randomDiff).toFixed(3),
-              buy: +(q.buy + randomDiff).toFixed(3), // округляем до 2 знаков
+              buy: +(q.buy + randomDiff).toFixed(3),
             };
           });
           this.server.emit('quotes-update', updatedQuotes);
