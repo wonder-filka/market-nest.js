@@ -29,12 +29,21 @@ export class QuotesGateway implements OnModuleInit {
       this.quotesService
         .getQuotes()
         .then((quotes) => {
-          this.server.emit('quotes-update', quotes);
+          const updatedQuotes = quotes.map((q) => {
+            const randomDiff = +(Math.random() * 0.03).toFixed(2);
+            return {
+              ...q,
+              price: +(q.price + randomDiff).toFixed(3),
+              sell: +(q.sell + randomDiff).toFixed(3),
+              buy: +(q.buy + randomDiff).toFixed(3), // округляем до 2 знаков
+            };
+          });
+          this.server.emit('quotes-update', updatedQuotes);
         })
         .catch((err) => {
           this.logger.error('Ошибка получения котировок:', err);
         });
-    }, 10 * 1000);
+    }, 1 * 1000);
   }
 
   onModuleDestroy() {
