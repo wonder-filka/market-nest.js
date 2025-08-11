@@ -48,7 +48,7 @@ export class QuotesGateway implements OnModuleInit {
             }
 
             // Для остальных — изменение от 0 до 0.03
-            const randomDiff = +(Math.random() * 0.03).toFixed(2);
+            const randomDiff = +(Math.random() * 0.05).toFixed(2);
 
             return {
               ...q,

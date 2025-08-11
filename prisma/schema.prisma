@@ -9,23 +9,24 @@ datasource db {
 }
 
 model User {
-  id           String           @id @default(uuid())
-  email        String           @unique
-  phone        String           @unique
-  firstName    String
-  lastName     String
-  passwordHash String
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-  isVerifed    Boolean          @default(false)
-  walletId     String           @unique
-  accounts     Account[]
-  positions    Position[]
-  supportChats SupportChat[]
-  sentMessages SupportMessage[] @relation("SenderMessages")
-  trades       Trade[]
-  wallet       Wallet           @relation(fields: [walletId], references: [id])
-  UserAsset    UserAsset[]
+  id            String           @id @default(uuid())
+  email         String           @unique
+  phone         String           @unique
+  firstName     String
+  lastName      String
+  passwordHash  String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  isVerifed     Boolean          @default(false)
+  walletId      String           @unique
+  accounts      Account[]
+  cryptoWallets CryptoWallet[]
+  positions     Position[]
+  supportChats  SupportChat[]
+  sentMessages  SupportMessage[] @relation("SenderMessages")
+  trades        Trade[]
+  wallet        Wallet           @relation(fields: [walletId], references: [id])
+  UserAsset     UserAsset[]
 }
 
 model SupportChat {
@@ -122,7 +123,7 @@ model Position {
 }
 
 model UserAsset {
-  id        String    @id
+  id        String    @id @default(uuid())
   userId    String
   asset     String
   createdAt DateTime  @default(now())
@@ -133,6 +134,21 @@ model UserAsset {
   User      User      @relation(fields: [userId], references: [id])
 
   @@unique([userId, asset])
+}
+
+model CryptoWallet {
+  id         String         @id @default(uuid())
+  userId     String
+  currency   CryptoCurrency
+  chain      Chain
+  address    String         @unique
+  privateKey String
+  mnemonic   String
+  createdAt  DateTime       @default(now())
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, currency, chain])
+  @@index([userId])
 }
 
 enum ChatStatus {
@@ -156,4 +172,15 @@ enum PositionStatus {
   Active
   Closed
   Liquidated
+}
+
+enum CryptoCurrency {
+  BTC
+  USDT
+  ETH // <— новое
+}
+
+enum Chain {
+  BITCOIN
+  ETHEREUM
 }
