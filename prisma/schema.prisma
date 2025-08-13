@@ -9,24 +9,30 @@ datasource db {
 }
 
 model User {
-  id            String           @id @default(uuid())
-  email         String           @unique
-  phone         String           @unique
-  firstName     String
-  lastName      String
-  passwordHash  String
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  isVerifed     Boolean          @default(false)
-  walletId      String           @unique
-  accounts      Account[]
-  cryptoWallets CryptoWallet[]
-  positions     Position[]
-  supportChats  SupportChat[]
-  sentMessages  SupportMessage[] @relation("SenderMessages")
-  trades        Trade[]
-  wallet        Wallet           @relation(fields: [walletId], references: [id])
-  UserAsset     UserAsset[]
+  id                 String             @id @default(uuid())
+  email              String             @unique
+  phone              String             @unique
+  firstName          String
+  lastName           String
+  passwordHash       String
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  walletId           String             @unique
+  accounts           Account[]
+  cryptoWallets      CryptoWallet[]
+  positions          Position[]
+  supportChats       SupportChat[]
+  sentMessages       SupportMessage[]   @relation("SenderMessages")
+  trades             Trade[]
+  wallet             Wallet             @relation(fields: [walletId], references: [id])
+  UserAsset          UserAsset[]
+}
+
+enum VerificationStatus {
+  UNVERIFIED // не верифицировано
+  VERIFIED // верифицировано
+  PENDING // в процессе верификации
 }
 
 model SupportChat {
