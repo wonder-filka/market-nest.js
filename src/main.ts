@@ -7,6 +7,8 @@ async function bootstrap() {
     origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
     credentials: true,
   });
-  await app.listen(process.env.PORT ?? 3001);
+  const PORT = parseInt(process.env.PORT ?? '3001', 10);
+  const HOST = process.env.HOST ?? '0.0.0.0';
+  await app.listen(PORT, HOST);
 }
 bootstrap();
