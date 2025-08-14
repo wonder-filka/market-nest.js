@@ -9,24 +9,38 @@ datasource db {
 }
 
 model User {
-  id                 String             @id @default(uuid())
-  email              String             @unique
-  phone              String             @unique
+  id                 String              @id @default(uuid())
+  email              String              @unique
+  phone              String              @unique
   firstName          String
   lastName           String
   passwordHash       String
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  verificationStatus VerificationStatus @default(UNVERIFIED)
-  walletId           String             @unique
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  verificationStatus VerificationStatus  @default(UNVERIFIED)
+  walletId           String              @unique
   accounts           Account[]
   cryptoWallets      CryptoWallet[]
   positions          Position[]
   supportChats       SupportChat[]
-  sentMessages       SupportMessage[]   @relation("SenderMessages")
+  sentMessages       SupportMessage[]    @relation("SenderMessages")
   trades             Trade[]
-  wallet             Wallet             @relation(fields: [walletId], references: [id])
+  wallet             Wallet              @relation(fields: [walletId], references: [id])
   UserAsset          UserAsset[]
+  passwordResetCodes PasswordResetCode[]
+}
+
+model PasswordResetCode {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  codeHash  String
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  usedAt    DateTime?
+  attempts  Int       @default(0)
+
+  @@index([userId])
 }
 
 enum VerificationStatus {
@@ -184,9 +198,11 @@ enum CryptoCurrency {
   BTC
   USDT
   ETH // <— новое
+  TRX
 }
 
 enum Chain {
   BITCOIN
   ETHEREUM
+  TRON
 }

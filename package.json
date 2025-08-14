@@ -33,6 +33,7 @@
     "ethers": "^6.15.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "tronweb": "^6.0.4",
     "yahoo-finance2": "^2.13.3"
   },
   "devDependencies": {
