@@ -50,7 +50,7 @@ export class QuotesService {
           const prices = history.quotes || [];
           const last = prices.at(-1);
           const prev = prices.at(-2);
-          const SPREAD = 0.05;
+          const SPREAD = 0.1;
           return {
             symbol,
             name: symbol,
